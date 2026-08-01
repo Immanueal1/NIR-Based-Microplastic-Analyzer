@@ -2,7 +2,8 @@
 
 **A portable, AI-powered device that identifies plastic types in real time using near-infrared spectroscopy.**
 
-![Features and Capabilities](Visual%20Explainers/Features%20and%20capabilities.png)
+![NIR-Based Microplastic Analyzer — Device Prototype](<images/device_photos/Image of real prototypee.png>)
+*Device enclosure and onboard interface, four-panel view (UI overlay shown for illustration).*
 
 ---
 
@@ -71,8 +72,6 @@ The classifier is trained to distinguish between 5 common plastic types:
 ---
 
 ## Hardware
-
-![Device Prototype](<images/device_photos/Image of real prototypee.png>)
 
 A fully self-contained, portable enclosure housing the ESP32, the NIR sensor and LED, the sample cuvette holder, an OLED display, and onboard battery power — no external lab equipment required.
 
