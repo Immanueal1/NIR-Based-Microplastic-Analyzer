@@ -1,0 +1,16 @@
+NIR-Based Microplastic Analyzer Showcase Repository
+Copyright (c) 2026 Immanueal | Krishna Kant Garhe. All Rights Reserved.
+
+This repository contains public portfolio, academic presentation, and visual demonstration assets for the NIR-Based Microplastic Analyzer project.
+
+I. PROPRIETARY CODE & DATA NOTICE
+---------------------------------
+Underlying firmware source code (.ino), backend server scripts, training pipelines, raw tabular sensor acquisition datasets, and binary machine learning model artifacts (.pkl) are proprietary assets preserved in private working archives. Public presentation in this repository does not grant any right or license to use, reproduce, reverse-engineer, or commercialize the underlying software or dataset.
+
+II. ACADEMIC & RESEARCH PUBLICATION
+------------------------------------
+The theoretical framework and optical sensor integration methodology presented herein are published in the International Research Journal of Modernization in Engineering Technology and Science (IRJMETS), e-ISSN: 2582-5208, Paper ID: 80400090574 (2026).
+
+III. MEDIA & VISUAL ASSETS
+---------------------------
+All schematics, system architecture diagrams, visual explainer graphics, performance charts, UI screenshots, and video recordings in this repository are original works of the author and protected by copyright.
