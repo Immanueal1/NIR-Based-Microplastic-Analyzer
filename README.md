@@ -2,7 +2,7 @@
 ### Portable, AI-Powered Near-Infrared Spectroscopy System for Real-Time Microplastic Polymer Identification
 
 [![Repository Status](https://img.shields.io/badge/Repository-Public_Portfolio_Showcase-blue?style=for-the-badge&logo=github)](https://github.com/Immanueal1)
-[![Embedded Hardware](https://img.shields.io/badge/Hardware-ESP32%20%7C%20AS7263%20NIR-red?style=for-the-badge&logo=expressif)](https://www.espressif.com/)
+[![Embedded Hardware](https://img.shields.io/badge/Hardware-ESP32%20%7C%206--Channel%20NIR-red?style=for-the-badge&logo=expressif)](https://www.espressif.com/)
 [![Machine Learning](https://img.shields.io/badge/ML%20Engine-scikit--learn%20%7C%20RBF--SVM-orange?style=for-the-badge&logo=scikit-learn)](https://scikit-learn.org/)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Spectroscopy](https://img.shields.io/badge/Spectroscopy-610--860%20nm%20NIR-purple?style=for-the-badge)](https://en.wikipedia.org/wiki/Near-infrared_spectroscopy)
@@ -110,7 +110,7 @@ The system operates through an integrated optical acquisition, signal processing
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
 │ 1. SAMPLE PREP  │ ──► │ 2. NIR LIGHT    │ ──► │ 3. OPTICAL SENS │ ──► │ 4. ESP32 EDGE   │ ──► │ 5. PREPROCESS   │
-│ Quartz cuvette  │     │ 850 nm NIR LED  │     │ AS7263 (6-Chan) │     │ I2C Polling     │     │ SNV Normalization│
+│ Quartz cuvette  │     │ 850 nm NIR LED  │     │ 6-Chan NIR Sens │     │ I2C Polling     │     │ SNV Normalization│
 └─────────────────┘     └─────────────────┘     └─────────────────┘     └─────────────────┘     └─────────────────┘
                                                                                                          │
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐                                      ▼
@@ -124,9 +124,9 @@ The system operates through an integrated optical acquisition, signal processing
   <p><em>Figure 2: End-to-end optical acquisition, baseline preprocessing, machine learning classification, and dual-interface notification flow.</em></p>
 </div>
 
-1. **Sample Insertion:** The microplastic sample (dry particles or aqueous suspension) is loaded into a high-transmittance quartz cuvette inserted into the optical chamber.
+1. **Sample Insertion:** The microplastic sample (dry particles or aqueous suspension) is loaded into a high-purity quartz cuvette inserted into the optical chamber.
 2. **Optical Illumination:** An integrated 850 nm NIR LED emits Near-Infrared light through the optical path.
-3. **Spectral Capture:** The 6-channel AS7263 sensor measures optical reflectance across 6 discrete wavelengths (610, 680, 730, 760, 810, 860 nm).
+3. **Spectral Capture:** The 6-channel NIR multi-spectral optical sensor measures reflectance across 6 discrete wavelengths (610, 680, 730, 760, 810, 860 nm).
 4. **Edge Transmission:** The ESP32 polls channel readings via I2C bus and formats JSON payload packets.
 5. **Signal Preprocessing:** Baseline dark-current subtraction and Standard Normal Variate (SNV) scaling eliminate light intensity fluctuations and sample thickness variances.
 6. **Machine Learning Classification:** The preprocessed feature vector is evaluated by an RBF-kernel SVM model (`SVC(C=100)`).
@@ -173,16 +173,16 @@ The analyzer is trained to identify the 5 most prevalent environmental microplas
 
 The hardware unit was engineered through CAD housing modeling, optical path alignment, and custom power regulation circuits:
 
-- **Optical Multi-Spectral Core:** AS7263 6-channel NIR spectral sensor operating across 610 nm, 680 nm, 730 nm, 760 nm, 810 nm, and 860 nm with integrated 16-bit ADCs.
+- **Optical Multi-Spectral Core:** 6-channel NIR spectral sensor operating across 610 nm, 680 nm, 730 nm, 760 nm, 810 nm, and 860 nm with integrated 16-bit ADCs.
 - **Main Microcontroller:** ESP32-WROOM-32 MCU managing I2C sensor communication, multi-mode button debouncing, OLED rendering, and Wi-Fi data transmission.
 - **Sample Chamber:** Custom-aligned optical cuvette slot housing 10mm quartz cuvettes situated directly between illumination and sensor optics.
 - **Power Management:** Internal 3.7V 2600mAh 18650 Li-ion battery interfaced with dual DC-DC voltage regulators delivering a ripple-free 3.3V power bus.
 
 | Component Name | Model / Specification | Engineering Purpose & Selection Rationale |
 | :--- | :--- | :--- |
-| **NIR Spectral Sensor** | AMS AS7263 (6-Channel) | Ultra-compact 6-channel NIR optical sensor providing factory-calibrated digital outputs via I2C. |
+| **NIR Spectral Sensor** | 6-Channel NIR Multi-Spectral Sensor | Compact 6-channel NIR optical sensor providing factory-calibrated digital outputs via I2C. |
 | **Microcontroller Core** | ESP32-WROOM-32 | Dual-core 240MHz processor offering built-in Wi-Fi/BLE and I2C hardware peripherals. |
-| **Illumination Source** | 850 nm NIR LED | Provides targeted near-infrared excitation matching the AS7263 spectral response range. |
+| **Illumination Source** | 850 nm NIR LED | Provides targeted near-infrared excitation matching the spectral response range. |
 | **Display Unit** | 0.96" I2C OLED (SSD1306) | Low-power monochrome display for field operation without external screens. |
 | **Power Storage** | 3.7V 18650 Li-ion Battery | High energy density cell for multi-hour untethered field deployment. |
 | **Sample Cell** | Quartz Glass Cuvette (10mm) | Ultra-high NIR transmittance cuvette minimizing optical reflection losses. |
@@ -252,13 +252,18 @@ The master training dataset was built, audit-repaired, and verified across struc
 - **Prediction Latency:** **< 1.8 Seconds**
 - **Feature Space:** 6 Optical Wavelengths (610 nm to 860 nm)
 
+<div align="center">
+  <img src="charts/accuracy_confidence_summary.png" alt="Performance & Caveat Summary Graphic" width="90%"/>
+  <p><em>Figure 9: Classifier accuracy, validation confidence metrics, and explicit single-session laboratory validation caveat summary graphic.</em></p>
+</div>
+
 > ⚠️ **Single-Session Laboratory Caveat:**  
 > Reported 97.0% accuracy figures were evaluated on a controlled single-session laboratory dataset under uniform ambient lighting. Multi-session validation across environmental samples and varied geometries is designated for future research.
 
 | Flagship Spectral Fingerprint Overview | 2D PCA Class Separability |
 | :---: | :---: |
 | <img src="charts/spectral_signature_overview.png" width="100%"/> | <img src="charts/class_separability_pca%20v2.png" width="100%"/> |
-| *Figure 9: Overlaid mean NIR reflectance signatures (610–860 nm) with ±1 std bands per class.* | *Figure 10: 2D Principal Component Analysis (PCA) scatter plot illustrating decision cluster separation.* |
+| *Figure 10: Overlaid mean NIR reflectance signatures (610–860 nm) with ±1 std bands per class.* | *Figure 11: 2D Principal Component Analysis (PCA) scatter plot illustrating decision cluster separation.* |
 
 ### **PDF Chart Reports**
 - [`[PDF] NIR Dataset Visualizations Report`](NIR_Dataset_Visualizations_watermark.pdf) — Complete 8-chart visual performance summary.
@@ -317,7 +322,7 @@ The theoretical framework, optical sensor integration methodology, and prelimina
 
 ## 🛠️ Technology Stack
 
-- **Embedded Hardware:** ESP32 Development Board, AMS AS7263 6-Channel NIR Multi-Spectral Sensor, 850 nm NIR Illumination LED, 0.96" SSD1306 OLED Display, 18650 3.7V Li-ion Battery.
+- **Embedded Hardware:** ESP32 Development Board, 6-Channel NIR Multi-Spectral Sensor, 850 nm NIR Illumination LED, 0.96" SSD1306 OLED Display, 18650 3.7V Li-ion Battery.
 - **Machine Learning & Signal Processing:** Python 3.12, scikit-learn (RBF-kernel Support Vector Machines), Standard Normal Variate (SNV), NumPy, SciPy, Pandas.
 - **Backend & Web Application:** Flask REST API, Streamlit Web UI, Plotly Data Visualization, OpenPyXL.
 - **Design & Prototyping Tools:** Fusion 360 CAD, KiCad PCB Design, VS Code, Git.
@@ -376,7 +381,7 @@ NIR Based Microplastic Analyzer-Github Repo/
 
 1. **Single-Session Laboratory Dataset:** Model training and evaluation were performed on laboratory samples under controlled ambient conditions. Multi-session environmental field validation across turbid water samples is required.
 2. **Polymer Sub-Classification:** Polyethylene readings reflect Low-Density Polyethylene (LDPE); further training is required to distinguish High-Density Polyethylene (HDPE).
-3. **Spectral Band Count:** Sensing is constrained to the 6 discrete wavelength channels of the AS7263 NIR sensor (610–860 nm).
+3. **Spectral Band Count:** Sensing is constrained to the 6 discrete wavelength channels of the NIR optical sensor (610–860 nm).
 
 ---
 
