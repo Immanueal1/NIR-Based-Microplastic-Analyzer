@@ -260,10 +260,17 @@ The master training dataset was built, audit-repaired, and verified across struc
 > ⚠️ **Single-Session Laboratory Caveat:**  
 > Reported 97.0% accuracy figures were evaluated on a controlled single-session laboratory dataset under uniform ambient lighting. Multi-session validation across environmental samples and varied geometries is designated for future research.
 
-| Flagship Spectral Fingerprint Overview | 2D PCA Class Separability |
+### **Spectral Signatures & Feature Analytics**
+
+| Overlaid NIR Spectral Signatures | 2D PCA Class Separability |
 | :---: | :---: |
 | <img src="charts/spectral_signature_overview.png" width="100%"/> | <img src="charts/class_separability_pca%20v2.png" width="100%"/> |
 | *Figure 10: Overlaid mean NIR reflectance signatures (610–860 nm) with ±1 std bands per class.* | *Figure 11: 2D Principal Component Analysis (PCA) scatter plot illustrating decision cluster separation.* |
+
+| Per-Channel Mean Intensity Bar Grid | NIR Channel Feature Correlation Heatmap |
+| :---: | :---: |
+| <img src="charts/channel_comparison_grid.png" width="100%"/> | <img src="charts/channel_correlation_heatmap%20%282%29.png" width="100%"/> |
+| *Figure 12: 2x3 bar grid comparing mean spectral reflectance intensities across 6 NIR wavelengths.* | *Figure 13: 6x6 correlation matrix heatmap illustrating feature interdependence across NIR channels.* |
 
 ### **PDF Chart Reports**
 - [`[PDF] NIR Dataset Visualizations Report`](NIR_Dataset_Visualizations_watermark.pdf) — Complete 8-chart visual performance summary.
@@ -280,9 +287,6 @@ Below is a complete index of all visual assets available in this repository:
 | **Comprehensive System Overview Graphic** | `Visual Explainers/Overview Image.png` | Infographic | [`View Image`](Visual%20Explainers/Overview%20Image.png) |
 | **5-Class Target Balance Donut Chart** | `charts/class_distribution.png` | Result Chart | [`View Image`](charts/class_distribution.png) |
 | **DRY vs. WET Signature Shift Plot** | `charts/dry_vs_wet_comparison.png` | Result Chart | [`View Image`](charts/dry_vs_wet_comparison.png) |
-| **Per-Channel Mean Intensity Bar Grid** | `charts/channel_comparison_grid.png` | Result Chart | [`View Image`](charts/channel_comparison_grid.png) |
-| **NIR Channel Correlation Heatmap** | `charts/channel_correlation_heatmap (2).png` | Result Chart | [`View Image`](charts/channel_correlation_heatmap%20%282%29.png) |
-| **Performance & Caveat Summary Graphic** | `charts/accuracy_confidence_summary.png` | Result Chart | [`View Image`](charts/accuracy_confidence_summary.png) |
 | **Dataset Composition Dashboard Panel** | `charts/sample_composition_dashboard.png` | Result Chart | [`View Image`](charts/sample_composition_dashboard.png) |
 | **Dataset Overview Flowchart** | `charts/Data set composition over view.png` | Result Chart | [`View Image`](charts/Data%20set%20composition%20over%20view.png) |
 | **PET B-Spline Spectral Signature Curve** | `charts_v2/spectral_signature_PET.png` | Spectral Curve | [`View Image`](charts_v2/spectral_signature_PET.png) |
