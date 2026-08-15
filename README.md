@@ -1,4 +1,4 @@
-# NIR-Based Microplastic Analyzer
+# NIR-Based Microplastic Analyzer 
 ### Portable, AI-Powered Near-Infrared Spectroscopy System for Real-Time Microplastic Polymer Identification
 
 [![Repository Status](https://img.shields.io/badge/Repository-Public_Portfolio_Showcase-blue?style=for-the-badge&logo=github)](https://github.com/Immanueal1)
