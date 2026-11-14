@@ -81,7 +81,7 @@ By coupling a **6-channel NIR multi-spectral optical sensor (610–860 nm)** wit
 | Feature Category | Technical Specification & Capability | Project Impact |
 | :--- | :--- | :--- |
 | **🚀 Real-Time Inference** | **< 1.8 Seconds Prediction Latency** | Instantaneous field decision-making without sample transport delays. |
-| **🎯 High Accuracy** | **97.0% 5-Fold Cross-Validation Accuracy** | Reliable polymer classification driven by an optimized RBF-kernel SVM model. |
+| **🎯 High Accuracy** | **97.0% 5-Fold Cross-Validation Accuracy** | Reliable polymer classification driven by an optimized Support Vector Machine (SVM) model. |
 | **🔬 Multi-Spectral NIR** | **6 Discrete Wavelength Bands (610, 680, 730, 760, 810, 860 nm)** | Captures signature overtone reflectance profiles of target polymers. |
 | **🔋 Battery-Powered Portability**| **Integrated 3.7V Li-ion Power & Dual DC-DC Regulators** | Autonomous hand-held field operation without wall outlets. |
 | **📺 Dual User Interface** | **0.96" OLED 4-Mode Display + Streamlit Real-Time Web App** | Seamless operation for both autonomous field technicians and remote researchers. |
@@ -110,12 +110,12 @@ The system operates through an integrated optical acquisition, signal processing
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
 │ 1. SAMPLE PREP  │ ──► │ 2. NIR LIGHT    │ ──► │ 3. OPTICAL SENS │ ──► │ 4. ESP32 EDGE   │ ──► │ 5. PREPROCESS   │
-│ Quartz cuvette  │     │ 850 nm NIR LED  │     │ 6-Chan NIR Sens │     │ I2C Polling     │     │ SNV Normalization│
+│ Quartz cuvette  │     │ 850 nm NIR LED  │     │ 6-Chan NIR Sens │     │ Data Capture    │     │ Signal Scaling  │
 └─────────────────┘     └─────────────────┘     └─────────────────┘     └─────────────────┘     └─────────────────┘
                                                                                                          │
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐                                      ▼
 │ 9. UI DECISION  │ ◄── │ 8. WEB DASHBOARD│ ◄── │ 7. CLASSIFY     │ ◄────────────────────────────────────┘
-│ OLED + Web Display│   │ Streamlit / Flask│    │ RBF-SVM Engine  │
+│ OLED + Web Display│   │ Streamlit / Flask│    │ SVM Classifier  │
 └─────────────────┘     └─────────────────┘     └─────────────────┘
 ```
 
@@ -127,9 +127,9 @@ The system operates through an integrated optical acquisition, signal processing
 1. **Sample Insertion:** The microplastic sample (dry particles or aqueous suspension) is loaded into a high-purity quartz cuvette inserted into the optical chamber.
 2. **Optical Illumination:** An integrated 850 nm NIR LED emits Near-Infrared light through the optical path.
 3. **Spectral Capture:** The 6-channel NIR multi-spectral optical sensor measures reflectance across 6 discrete wavelengths (610, 680, 730, 760, 810, 860 nm).
-4. **Edge Transmission:** The ESP32 polls channel readings via I2C bus and formats JSON payload packets.
-5. **Signal Preprocessing:** Baseline dark-current subtraction and Standard Normal Variate (SNV) scaling eliminate light intensity fluctuations and sample thickness variances.
-6. **Machine Learning Classification:** The preprocessed feature vector is evaluated by an RBF-kernel SVM model (`SVC(C=100)`).
+4. **Edge Transmission:** The ESP32 captures channel readings and transmits formatted sensor data.
+5. **Signal Preprocessing:** Baseline correction and signal normalization eliminate light intensity fluctuations and sample thickness variances.
+6. **Machine Learning Classification:** The preprocessed feature vector is evaluated by a trained Support Vector Machine (SVM) classification model.
 7. **Dual-Interface Output:** Real-time prediction results, confidence percentages, and spectral plots render simultaneously on the physical OLED UI and Web Dashboard.
 
 ---
@@ -138,14 +138,11 @@ The system operates through an integrated optical acquisition, signal processing
 
 The architecture seamlessly couples physical sensor optics, embedded firmware, REST communication, and web visualization:
 
-<div align="center">
-  <img src="Visual%20Explainers/End%20to%20end%20system%20architecture.png" alt="System Architecture Overview Diagram" width="90%"/>
-  <p><em>Figure 3: Conceptual hardware-to-cloud system architecture block diagram detailing hardware layer, edge MCU layer, classification engine, and web monitoring layer.</em></p>
-</div>
+
 
 <div align="center">
   <img src="Visual%20Explainers/hardware%20connection%20architecture.png" alt="Hardware Connection Block Diagram" width="90%"/>
-  <p><em>Figure 4: System hardware block diagram detailing power distribution, optical light paths, data communication channels, and control signals.</em></p>
+  <p><em>Figure 3: System hardware block diagram detailing power distribution, optical light paths, data communication channels, and control signals.</em></p>
 </div>
 
 ---
@@ -157,14 +154,14 @@ The analyzer is trained to identify the 5 most prevalent environmental microplas
 | Polymer Class | Chemical Name | Common Commercial & Industrial Applications | Environmental Risk Profile |
 | :---: | :--- | :--- | :---: |
 | **PET** | Polyethylene Terephthalate | Beverage bottles, food containers, synthetic polyester clothing fibers | **High** (Marine ingestion) |
-| **PE** | Polyethylene (LDPE/HDPE) | Shopping bags, plastic films, squeeze bottles, agricultural mulch | **High** (Widespread micro-fragmentation) |
+| **PE** | Polyethylene (LDPE) | Shopping bags, plastic films, squeeze bottles, agricultural mulch | **High** (Widespread micro-fragmentation) |
 | **PP** | Polypropylene | Bottle caps, food packaging containers, drinking straws, auto parts | **Moderate** (Buoyant, marine surface float) |
 | **PS** | Polystyrene | Disposable cutlery, rigid foam insulation, food clamshells, labware | **High** (Toxic styrene leaching risk) |
 | **PVC** | Polyvinyl Chloride | Water supply pipes, credit cards, medical tubing, synthetic leather packaging | **Severe** (Additives & heavy metal burden) |
 
 <div align="center">
   <img src="Visual%20Explainers/Plastic%20Types%20Detected%20by%20the%20AI-Based%20NIR%20Microplastic%20Analyzer.png" alt="Target Plastic Types Infographic" width="85%"/>
-  <p><em>Figure 5: Target plastic polymers classified by the AI-powered NIR Analyzer system with real-world applications.</em></p>
+  <p><em>Figure 4: Target plastic polymers classified by the AI-powered NIR Analyzer system with real-world applications.</em></p>
 </div>
 
 ---
@@ -173,23 +170,23 @@ The analyzer is trained to identify the 5 most prevalent environmental microplas
 
 The hardware unit was engineered through CAD housing modeling, optical path alignment, and custom power regulation circuits:
 
-- **Optical Multi-Spectral Core:** 6-channel NIR spectral sensor operating across 610 nm, 680 nm, 730 nm, 760 nm, 810 nm, and 860 nm with integrated 16-bit ADCs.
-- **Main Microcontroller:** ESP32-WROOM-32 MCU managing I2C sensor communication, multi-mode button debouncing, OLED rendering, and Wi-Fi data transmission.
-- **Sample Chamber:** Custom-aligned optical cuvette slot housing 10mm quartz cuvettes situated directly between illumination and sensor optics.
+- **Optical Multi-Spectral Core:** 6-channel NIR spectral sensor operating across 610 nm, 680 nm, 730 nm, 760 nm, 810 nm, and 860 nm with integrated digital conversion.
+- **Main Microcontroller:** ESP32 MCU managing sensor communication, user button inputs, OLED rendering, and Wi-Fi data transmission.
+- **Sample Chamber:** Custom-aligned optical cuvette slot housing quartz cuvettes situated directly between illumination and sensor optics.
 - **Power Management:** Internal 3.7V 2600mAh 18650 Li-ion battery interfaced with dual DC-DC voltage regulators delivering a ripple-free 3.3V power bus.
 
-| Component Name | Model / Specification | Engineering Purpose & Selection Rationale |
+| Component Name | Specification | Engineering Purpose & Selection Rationale |
 | :--- | :--- | :--- |
-| **NIR Spectral Sensor** | 6-Channel NIR Multi-Spectral Sensor | Compact 6-channel NIR optical sensor providing factory-calibrated digital outputs via I2C. |
-| **Microcontroller Core** | ESP32-WROOM-32 | Dual-core 240MHz processor offering built-in Wi-Fi/BLE and I2C hardware peripherals. |
+| **NIR Spectral Sensor** | 6-Channel NIR Multi-Spectral Sensor | Compact 6-channel NIR optical sensor providing factory-calibrated digital spectral outputs. |
+| **Microcontroller Core** | ESP32 | High-performance microcontroller offering built-in Wi-Fi and peripheral interfaces. |
 | **Illumination Source** | 850 nm NIR LED | Provides targeted near-infrared excitation matching the spectral response range. |
-| **Display Unit** | 0.96" I2C OLED (SSD1306) | Low-power monochrome display for field operation without external screens. |
-| **Power Storage** | 3.7V 18650 Li-ion Battery | High energy density cell for multi-hour untethered field deployment. |
-| **Sample Cell** | Quartz Glass Cuvette (10mm) | Ultra-high NIR transmittance cuvette minimizing optical reflection losses. |
+| **Display Unit** | Monochrome OLED Display | Low-power display for autonomous field operation without external screens. |
+| **Power Storage** | Rechargeable Li-ion Battery | High energy density power cell for multi-hour untethered field deployment. |
+| **Sample Cell** | Quartz Glass Cuvette | Ultra-high NIR transmittance cuvette minimizing optical reflection losses. |
 
 <div align="center">
   <img src="Visual%20Explainers/Development%20journery%20from%20concept%20to%20real%20prototype.png" alt="Development Journey Infographic" width="90%"/>
-  <p><em>Figure 6: Hardware development journey mapping progression from optical theory and breadboard testing to custom CAD housing and integrated assembly.</em></p>
+  <p><em>Figure 5: Hardware development journey mapping progression from optical theory and breadboard testing to custom CAD housing and integrated assembly.</em></p>
 </div>
 
 ---
@@ -201,14 +198,14 @@ The software platform delivers dual-interface operation for field technicians an
 | Physical OLED Interface (Autonomous Field Unit) | Web Classifier Dashboard (Remote Lab Monitoring) |
 | :---: | :---: |
 | <img src="images/dashboard_screenshots/oled_interface_modes.png" width="100%"/> | <img src="images/dashboard_screenshots/web_dashboard_ui.png" width="100%"/> |
-| *Figure 7: Physical OLED 4-state navigation UI (Home Dashboard, WiFi Setup, Predict Engine, Info).* | *Figure 8: Streamlit Web Dashboard rendering live NIR spectral streaming, peak channel response, and SVM prediction confidence.* |
+| *Figure 6: Physical OLED 4-state navigation UI (Home Dashboard, WiFi Setup, Predict Engine, Info).* | *Figure 7: Streamlit Web Dashboard rendering live NIR spectral streaming, peak channel response, and SVM prediction confidence.* |
 
 - **OLED UI State Machine:** Driven by a cyclic 4-state navigation model:
   1. **Home Dashboard:** Displays system temperature, battery level, Wi-Fi status, and supported plastics.
   2. **WiFi Setup:** Manages network scanning, SSID selection, connection status, and assigned local IP.
   3. **Predict Engine:** Executes spectral acquisition, renders real-time wavelength curves, and displays prediction results.
   4. **Plastic Info:** Provides educational polymer facts, health risks, and recycling codes.
-- **Streamlit Web Dashboard:** Connects to backend Flask REST API endpoints, rendering interactive Plotly spectral charts, classification history logs, and confidence gauges.
+- **Streamlit Web Dashboard:** Connects to backend Flask REST API endpoints, rendering interactive spectral charts, classification history logs, and confidence gauges.
 
 ---
 
@@ -216,32 +213,20 @@ The software platform delivers dual-interface operation for field technicians an
 
 ```
 ┌───────────────────────┐     ┌───────────────────────┐     ┌───────────────────────┐     ┌───────────────────────┐
-│ 1. RAW REFLECTANCE    │ ──► │ 2. DARK SUBTRACTION   │ ──► │ 3. SNV TRANSFORMATION │ ──► │ 4. RBF-SVM PREDICT    │
-│ 6 Discrete NIR Channels│    │ Ambient offset remove │     │ Mean=0, Variance=1    │     │ SVC(C=100, gamma='auto')│
+│ 1. RAW REFLECTANCE    │ ──► │ 2. BASELINE REMOVAL   │ ──► │ 3. NORMALIZATION      │ ──► │ 4. SVM CLASSIFICATION │
+│ 6 Discrete NIR Channels│    │ Ambient offset remove │     │ Variance scaling      │     │ Trained Classifier    │
 └───────────────────────┘     └───────────────────────┘     └───────────────────────┘     └───────────────────────┘
 ```
 
-1. **Dark Current Baseline Subtraction:** Removes ambient thermal noise and sensor baseline drift.
-2. **Standard Normal Variate (SNV) Preprocessing:** Normalizes each 6-channel spectrum by subtracting the spectrum mean and dividing by the standard deviation. This eliminates optical path length variation and physical particle size scattering variations:
-   $$\mathbf{x}_{	ext{SNV}} = rac{\mathbf{x} - \mu_{\mathbf{x}}}{\sigma_{\mathbf{x}}}$$
+1. **Baseline Correction:** Removes ambient background optical noise and sensor baseline drift.
+2. **Signal Preprocessing:** Normalizes spectral readings to eliminate optical path variations and physical particle size scattering effects across samples.
 3. **Classification Algorithm:** Evaluated across multiple classifier families (Random Forest, K-NN, Linear SVM). The **Support Vector Machine with Radial Basis Function kernel (`SVC(C=100, kernel='rbf')`)** demonstrated optimal decision boundary non-linearity for 6-dimensional NIR space.
 
 ---
 
 ## 📊 Dataset Architecture & Scientific Audit
 
-The master training dataset was built, audit-repaired, and verified across structured acquisition phases:
-
-| Plastic Polymer Class | DRY Condition Readings | WET Condition Readings | Master `NIR_ONLY` Spectra | Class Share |
-| :---: | :---: | :---: | :---: | :---: |
-| **PET** | 100 spectra | 100 spectra | **200 spectra** | 20.0% |
-| **PE** (LDPE) | 100 spectra | 100 spectra | **200 spectra** | 20.0% |
-| **PP** | 100 spectra | 100 spectra | **200 spectra** | 20.0% |
-| **PS** | 100 spectra | 100 spectra | **200 spectra** | 20.0% |
-| **PVC** | 100 spectra | 100 spectra | **200 spectra** | 20.0% |
-| **TOTAL** | **500 spectra** | **500 spectra** | **1,000 spectra** | **100.0% Balanced** |
-
-*Note: The complete validated dataset contains 3,600 valid 4-phase spectra (`NIR_ONLY`: 1,000, `ALL_ON`: 1,000, `DARK_1`: 800, `DARK_2`: 800) audit-verified in [`docs/NIR_Dataset_Excel_Summary.xlsx`](docs/NIR_Dataset_Excel_Summary.xlsx).*
+The 97.0% result is a 5-fold cross-validation score on a balanced training set of 500 calibrated NIR spectra (100 per class: PET, PE, PP, PS, PVC). Dry and wet condition captures were also recorded during data collection.
 
 ---
 
@@ -254,7 +239,7 @@ The master training dataset was built, audit-repaired, and verified across struc
 
 <div align="center">
   <img src="charts/accuracy_confidence_summary.png" alt="Performance & Caveat Summary Graphic" width="90%"/>
-  <p><em>Figure 9: Classifier accuracy, validation confidence metrics, and explicit single-session laboratory validation caveat summary graphic.</em></p>
+  <p><em>Figure 8: Classifier accuracy, validation confidence metrics, and explicit single-session laboratory validation caveat summary graphic.</em></p>
 </div>
 
 > ⚠️ **Single-Session Laboratory Caveat:**  
@@ -265,12 +250,12 @@ The master training dataset was built, audit-repaired, and verified across struc
 | Overlaid NIR Spectral Signatures | 2D PCA Class Separability |
 | :---: | :---: |
 | <img src="charts/spectral_signature_overview.png" width="100%"/> | <img src="charts/class_separability_pca%20v2.png" width="100%"/> |
-| *Figure 10: Overlaid mean NIR reflectance signatures (610–860 nm) with ±1 std bands per class.* | *Figure 11: 2D Principal Component Analysis (PCA) scatter plot illustrating decision cluster separation.* |
+| *Figure 9: Overlaid mean NIR reflectance signatures (610–860 nm) with ±1 std bands per class.* | *Figure 10: 2D Principal Component Analysis (PCA) scatter plot illustrating decision cluster separation.* |
 
 | Per-Channel Mean Intensity Bar Grid | NIR Channel Feature Correlation Heatmap |
 | :---: | :---: |
 | <img src="charts/channel_comparison_grid.png" width="100%"/> | <img src="charts/channel_correlation_heatmap%20%282%29.png" width="100%"/> |
-| *Figure 12: 2x3 bar grid comparing mean spectral reflectance intensities across 6 NIR wavelengths.* | *Figure 13: 6x6 correlation matrix heatmap illustrating feature interdependence across NIR channels.* |
+| *Figure 11: 2x3 bar grid comparing mean spectral reflectance intensities across 6 NIR wavelengths.* | *Figure 12: 6x6 correlation matrix heatmap illustrating feature interdependence across NIR channels.* |
 
 ### **PDF Chart Reports**
 - [`[PDF] NIR Dataset Visualizations Report`](NIR_Dataset_Visualizations_watermark.pdf) — Complete 8-chart visual performance summary.
@@ -305,20 +290,22 @@ The theoretical framework, optical sensor integration methodology, and prelimina
 
 - **Journal:** *International Research Journal of Modernization in Engineering Technology and Science* (**IRJMETS**)
 - **Identifiers:** e-ISSN: 2582-5208 | Scientific Impact Factor: 7.868
-- **Paper ID / Reference:** `80400090574` (2026)
+- **Paper ID / Reference:** `IRJMETS80400090574` (2026)
+- **DOI:** [https://www.doi.org/10.56726/IRJMETS93708](https://www.doi.org/10.56726/IRJMETS93708)
 - **Publication Certificate:** [`[PDF] Official IRJMETS Certificate of Publication`](certificate%20of%20Publication.pdf)
 
 ### **BibTeX Citation**
 ```bibtex
 @article{nir_microplastic_analyzer_2026,
-  author    = {Immanueal and Krishna Kant Garhe},
-  title     = {Portable Near-Infrared Spectroscopy and Machine Learning System for Real-Time Microplastic Identification},
-  journal   = {International Research Journal of Modernization in Engineering Technology and Science (IRJMETS)},
-  volume    = {8},
-  number    = {1},
-  issn      = {2582-5208},
-  refid     = {80400090574},
-  year      = {2026}
+  author  = {Garhe, Krishnakant},
+  title   = {NIR SENSOR-BASED MICROPLASTIC ANALYZER},
+  journal = {International Research Journal of Modernization in Engineering Technology and Science (IRJMETS)},
+  volume  = {08},
+  number  = {04},
+  month   = {April},
+  year    = {2026},
+  issn    = {2582-5208},
+  doi     = {10.56726/IRJMETS93708}
 }
 ```
 
@@ -326,9 +313,9 @@ The theoretical framework, optical sensor integration methodology, and prelimina
 
 ## 🛠️ Technology Stack
 
-- **Embedded Hardware:** ESP32 Development Board, 6-Channel NIR Multi-Spectral Sensor, 850 nm NIR Illumination LED, 0.96" SSD1306 OLED Display, 18650 3.7V Li-ion Battery.
-- **Machine Learning & Signal Processing:** Python 3.12, scikit-learn (RBF-kernel Support Vector Machines), Standard Normal Variate (SNV), NumPy, SciPy, Pandas.
-- **Backend & Web Application:** Flask REST API, Streamlit Web UI, Plotly Data Visualization, OpenPyXL.
+- **Embedded Hardware:** ESP32 Development Board, 6-Channel NIR Multi-Spectral Sensor, 850 nm NIR Illumination LED, OLED Display, Rechargeable Li-ion Battery.
+- **Machine Learning & Signal Processing:** Python 3.12, scikit-learn (Support Vector Machines), NumPy, SciPy, Pandas.
+- **Backend & Web Application:** Flask REST API, Streamlit Web UI.
 - **Design & Prototyping Tools:** Fusion 360 CAD, KiCad PCB Design, VS Code, Git.
 
 ---
@@ -337,43 +324,53 @@ The theoretical framework, optical sensor integration methodology, and prelimina
 
 ```
 NIR Based Microplastic Analyzer-Github Repo/
-├── LICENSE                                                     # Portfolio Copyright License
-├── README.md                                                    # Repository Documentation
-├── certificate of Publication.pdf                              # Academic Publication Certificate
-├── NIR_Dataset_Visualizations_watermark.pdf                    # PDF Summary Chart Report
-├── Spectral_signature_of_plastics_watermark.pdf                # PDF Spectral Signature Report
-├── charts/                                                     # Visual Summary Performance Charts
+├── .gitattributes                                              # Git configuration
+├── CHANGELOG.md                                                # Project version history
+├── CITATION.cff                                                # Academic citation metadata
+├── LICENSE                                                     # Portfolio copyright license
+├── NIR_Dataset_Visualizations_watermark.pdf                    # PDF visual summary report
+├── NOTICE                                                      # Intellectual property notice
+├── README.md                                                   # Repository documentation
+├── SECURITY.md                                                 # Security and privacy policy
+├── Spectral_signature_of_plastics_watermark.pdf                # PDF spectral signature report
+├── certificate of Publication.pdf                              # Official IRJMETS journal certificate
+├── charts/                                                     # Visual summary performance charts
+│   ├── Data set composition over view.png
 │   ├── accuracy_confidence_summary.png
 │   ├── channel_comparison_grid.png
+│   ├── channel_correlation_heatmap (2).png
 │   ├── class_distribution.png
 │   ├── class_separability_pca v2.png
 │   ├── dry_vs_wet_comparison.png
 │   ├── sample_composition_dashboard.png
 │   └── spectral_signature_overview.png
-├── charts_v2/                                                  # Individual B-Spline Spectral Curves
+├── charts_v2/                                                  # Individual polymer spectral curves
 │   ├── spectral_signature_PE.png
 │   ├── spectral_signature_PET.png
 │   ├── spectral_signature_PP.png
 │   ├── spectral_signature_PS.png
 │   └── spectral_signature_PVC.png
-├── docs/                                                       # Dataset Summaries & Academic Reference
+├── docs/                                                       # Dataset summaries & reference databases
 │   ├── NIR_Dataset_Excel_Summary.xlsx
-│   └── Refrence/                                               # SLoPP / SLoPP-E Raman Databases
-├── images/                                                     # UI Screenshots & Hardware Collages
+│   └── Refrence/
+│       ├── copy-of-slopp-and-slopp-e-spectra-itemized_public.xlsx
+│       ├── please-read.pdf
+│       ├── slopp-and-slopp-e.zip
+│       └── witec_truematch1.zip
+├── images/                                                     # UI screenshots & device photos
 │   ├── dashboard_screenshots/
 │   │   ├── oled_interface_modes.png
 │   │   └── web_dashboard_ui.png
 │   └── device_photos/
 │       └── Image of real prototypee.png
-├── Live Recordings/                                            # MP4 Video Demonstrations
+├── Live Recordings/                                            # MP4 operational video demonstrations
 │   ├── Final prototype live recording .mp4
 │   ├── Prototype before finishing touches.mp4
 │   ├── Reading recording.mp4
 │   └── WebDashboard Recording .mp4
-└── Visual Explainers/                                          # Architecture & Pipeline Infographics
+└── Visual Explainers/                                          # Architecture & pipeline infographics
     ├── Development journery from concept to real prototype.png
     ├── End to end data flow of an ai based nir based microplastic analyer.png
-    ├── End to end system architecture.png
     ├── Overview Image.png
     ├── Plastic Types Detected by the AI-Based NIR Microplastic Analyzer.png
     └── hardware connection architecture.png
@@ -409,7 +406,7 @@ This repository and its contents are protected under copyright law and governed 
 
 ## 👤 Credits & Authorship
 
-- **Project Lead & System Developer:** **Immanueal \| Krishna Kant Garhe**
+- **Project Lead & System Developer:** **Krishnakant Garhe**
 - **Academic Institution:** **Bhilai Institute of Technology (BIT) Durg (2026 Batch)** — *Department of Electronics and Telecommunication Engineering*
 - **Publication Reference:** IRJMETS Paper ID `80400090574` (2026)
 
@@ -421,7 +418,6 @@ For research inquiries, technical discussions, or professional portfolio reviews
 
 - **GitHub:** [https://github.com/Immanueal1](https://github.com/Immanueal1)
 - **LinkedIn:** [Krishna Kant Garhe (Immanueal) - ETC Engineer](https://www.linkedin.com/in/krishna-kant-garhe-immanueal-etc-engineer/)
-- **Email:** [krishnakantgarhe@gmail.com](mailto:krishnakantgarhe@gmail.com)
 
 ---
 

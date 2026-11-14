@@ -2,26 +2,29 @@ cff-version: 1.2.0
 message: "If you reference this project, optical methodology, or publication in your research, please cite it as below."
 authors:
   - family-names: "Garhe"
-    given-names: "Krishna Kant"
-    alias: "Immanueal"
+    given-names: "Krishnakant"
     affiliation: "Bhilai Institute of Technology (BIT) Durg"
-title: "NIR-Based Microplastic Analyzer: Portable Near-Infrared Spectroscopy and Machine Learning System for Real-Time Microplastic Polymer Identification"
+title: "NIR SENSOR-BASED MICROPLASTIC ANALYZER"
 version: 1.0.0
-date-released: 2026-01-15
+date-released: 2026-04-10
 repository-code: "https://github.com/Immanueal1/NIR-Based-Microplastic-Analyzer"
+url: "https://github.com/Immanueal1/NIR-Based-Microplastic-Analyzer"
 preferred-citation:
   type: article
   authors:
     - family-names: "Garhe"
-      given-names: "Krishna Kant"
-      alias: "Immanueal"
-  title: "Portable Near-Infrared Spectroscopy and Machine Learning System for Real-Time Microplastic Identification"
+      given-names: "Krishnakant"
+  title: "NIR SENSOR-BASED MICROPLASTIC ANALYZER"
   journal: "International Research Journal of Modernization in Engineering Technology and Science (IRJMETS)"
-  volume: "8"
-  issue: "1"
+  volume: "08"
+  issue: "04"
+  month: 4
   year: 2026
   issn: "2582-5208"
+  doi: "10.56726/IRJMETS93708"
   identifiers:
+    - type: doi
+      value: "10.56726/IRJMETS93708"
     - type: other
-      value: "Paper ID 80400090574"
-  url: "certificate%20of%20Publication.pdf"
+      value: "Paper ID IRJMETS80400090574"
+  url: "https://github.com/Immanueal1/NIR-Based-Microplastic-Analyzer"
